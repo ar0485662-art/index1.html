@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-slate-50">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job with Partnership Available - Partner Portal</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 bg-slate-50 antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Header Banner -->
+  <header class="bg-gradient-to-r from-slate-900 via-brand-800 to-slate-900 text-white shadow-md border-b border-slate-800 sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+          <span class="p-2 bg-brand-500/20 text-brand-100 rounded-lg border border-brand-500/30">
+            <i class="fa-solid fa-handshake-angle text-xl sm:text-2xl"></i>
+          </span>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Job with Partnership Available</h1>
+            <p class="text-xs sm:text-sm text-slate-300 hidden sm:block">Apply for equity & co-founder opportunities</p>
+          </div>
+        </div>
+
+        <!-- Admin View Switcher / Status -->
+        <div class="flex items-center gap-3">
+          <div id="adminBadge" class="hidden flex items-center gap-2 bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-3 py-1 rounded-full text-xs font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            Admin Authenticated
+          </div>
+          <button id="authToggleBtn" class="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold border border-white/20 transition-all flex items-center gap-2 shadow-sm">
+            <i id="authBtnIcon" class="fa-solid fa-lock"></i>
+            <span id="authBtnText">Admin Login</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- PUBLIC VIEW: Application Form Only -->
+  <main id="publicView" class="flex-1 max-w-3xl w-full mx-auto px-4 py-8 sm:py-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200/80 overflow-hidden">
+      <div class="bg-gradient-to-r from-slate-900 to-brand-800 p-6 sm:p-8 text-white relative">
+        <span class="text-xs font-semibold uppercase tracking-widest text-brand-300 bg-brand-500/20 border border-brand-400/30 px-3 py-1 rounded-full">
+          Open Equity Hiring
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold mt-3">Partner Application Form</h2>
+        <p class="mt-2 text-slate-300 text-sm leading-relaxed">
+          Submit your profile to join our strategic leadership team. Applications are reviewed directly by the venture creator.
+        </p>
+      </div>
+
+      <form id="partnerForm" class="p-6 sm:p-8 space-y-5" novalidate>
+        <div>
+          <label for="fullName" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Full Name <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative rounded-lg shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-regular fa-user text-sm"></i>
+            </div>
+            <input type="text" id="fullName" placeholder="e.g. Sarah Jenkins" class="w-full pl-10 pr-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors" required>
+          </div>
+          <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div>
+            <label for="email" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Email Address <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative rounded-lg shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <i class="fa-regular fa-envelope text-sm"></i>
+              </div>
+              <input type="email" id="email" placeholder="sarah@example.com" class="w-full pl-10 pr-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors" required>
+            </div>
+            <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+          </div>
+
+          <div>
+            <label for="phone" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+              Phone Number <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative rounded-lg shadow-sm">
+              <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <i class="fa-solid fa-phone text-xs"></i>
+              </div>
+              <input type="tel" id="phone" placeholder="+1 (555) 000-0000" class="w-full pl-10 pr-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors" required>
+            </div>
+            <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+          </div>
+        </div>
+
+        <div>
+          <label for="rolePreference" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Partnership Role Preference <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative rounded-lg shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-briefcase text-sm"></i>
+            </div>
+            <select id="rolePreference" class="w-full pl-10 pr-8 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 bg-white appearance-none transition-colors" required>
+              <option value="" disabled selected>Select your target partnership role...</option>
+              <option value="Co-Founder / Equity Partner">Co-Founder / Equity Partner</option>
+              <option value="Technical Co-Founder (CTO)">Technical Co-Founder (CTO)</option>
+              <option value="Growth & Marketing Partner">Growth & Marketing Partner</option>
+              <option value="Operations & Strategy Partner">Operations & Strategy Partner</option>
+              <option value="Investor / Financial Partner">Investor / Financial Partner</option>
+              <option value="Advisor & Industry Consultant">Advisor & Industry Consultant</option>
+            </select>
+            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </div>
+          </div>
+          <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+        </div>
+
+        <div>
+          <label for="skills" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Primary Skills & Expertise <span class="text-slate-400 font-normal">(Comma separated)</span> <span class="text-rose-500">*</span>
+          </label>
+          <div class="relative rounded-lg shadow-sm">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-code text-sm"></i>
+            </div>
+            <input type="text" id="skills" placeholder="e.g. Fullstack, Venture Capital, Growth Hacking" class="w-full pl-10 pr-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors" required>
+          </div>
+          <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+        </div>
+
+        <div>
+          <label for="bio" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
+            Short Bio & Partnership Vision <span class="text-rose-500">*</span>
+          </label>
+          <textarea id="bio" rows="4" placeholder="Briefly introduce yourself, your experience, and what value you bring to this partnership..." class="w-full px-3 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors resize-none" required></textarea>
+          <p class="error-msg text-xs text-rose-500 mt-1 hidden"></p>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-500">
+          <i class="fa-solid fa-user-shield text-brand-600 text-sm mt-0.5"></i>
+          <span>Your submission is confidential. Registered details are stored securely on Firebase cloud and are accessible to administrators only.</span>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" id="submitBtn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-semibold py-3.5 px-4 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm sm:text-base">
+            <i class="fa-solid fa-paper-plane"></i>
+            <span>Submit Partner Application</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <!-- ADMIN VIEW -->
+  <main id="adminView" class="hidden flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col space-y-6">
+    <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-lg border border-slate-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <h2 class="text-xl sm:text-2xl font-bold">Admin Portal: Firebase Database</h2>
+          <span class="bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Cloud Connected</span>
+        </div>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1">Review applicant profiles, manage candidates, and export records.</p>
+      </div>
+
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="bg-white/10 px-4 py-3 rounded-xl border border-white/10 flex-1 md:flex-initial text-center">
+          <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Registrars</span>
+          <span id="statTotalCount" class="font-bold text-2xl text-white">0</span>
+        </div>
+        <div class="bg-white/10 px-4 py-3 rounded-xl border border-white/10 flex-1 md:flex-initial text-center">
+          <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Top Preference</span>
+          <span id="statTopRole" class="font-bold text-xs sm:text-sm text-brand-300 truncate max-w-[140px] block mt-1">N/A</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex flex-col sm:flex-row gap-3 items-center justify-between">
+      <div class="relative w-full sm:w-80">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+          <i class="fa-solid fa-magnifying-glass text-xs"></i>
+        </div>
+        <input type="text" id="searchInput" placeholder="Search by name, email, skills..." class="w-full pl-9 pr-3 py-2 text-xs sm:text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 bg-slate-50 focus:bg-white transition-colors">
+      </div>
+
+      <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end flex-wrap">
+        <select id="roleFilter" class="py-2 px-3 text-xs border border-slate-200 rounded-lg bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-700">
+          <option value="ALL">All Roles</option>
+          <option value="Co-Founder / Equity Partner">Co-Founder</option>
+          <option value="Technical Co-Founder (CTO)">CTO / Tech</option>
+          <option value="Growth & Marketing Partner">Growth & Marketing</option>
+          <option value="Operations & Strategy Partner">Operations</option>
+          <option value="Investor / Financial Partner">Investor</option>
+          <option value="Advisor & Industry Consultant">Advisor</option>
+        </select>
+
+        <div class="flex items-center gap-1.5">
+          <button id="exportCsvBtn" title="Export CSV" class="px-3 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-file-csv text-emerald-600"></i> Export CSV
+          </button>
+          <button id="exportJsonBtn" title="Export JSON" class="px-3 py-2 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg border border-slate-200 transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-file-code text-brand-600"></i> JSON
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="applicantList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Dynamic Firebase cards -->
+    </div>
+  </main>
+
+  <!-- ADMIN LOGIN MODAL -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full overflow-hidden shadow-2xl border border-slate-100 p-6 sm:p-8">
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-full flex items-center justify-center mx-auto mb-3 text-xl border border-brand-100">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">Creator Authentication</h3>
+        <p class="text-xs text-slate-500 mt-1">Enter admin passcode to view database.</p>
+      </div>
+      <form id="loginForm" class="space-y-4" novalidate>
+        <div>
+          <label for="adminPasscode" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">Admin Passcode</label>
+          <input type="password" id="adminPasscode" placeholder="Enter password" class="w-full px-3.5 py-2.5 text-sm border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors" required>
+          <p id="loginError" class="text-xs text-rose-500 mt-1.5 hidden"></p>
+        </div>
+        <div class="flex items-center justify-between gap-3 pt-2">
+          <button type="button" id="closeLoginBtn" class="w-1/2 py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors">Cancel</button>
+          <button type="submit" class="w-1/2 py-2.5 px-4 bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold rounded-xl shadow-md transition-colors">Authenticate</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- CANDIDATE DETAIL MODAL -->
+  <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-100">
+      <div id="modalHeader" class="bg-slate-900 text-white p-6 relative">
+        <button id="closeDetailModalBtn" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg">
+          <i class="fa-solid fa-xmark text-xl"></i>
+        </button>
+        <span id="modalRoleBadge" class="text-xs font-semibold uppercase tracking-wider bg-brand-500/30 text-brand-200 px-3 py-1 rounded-full border border-brand-400/30">Role</span>
+        <h3 id="modalName" class="text-2xl font-bold mt-3">Full Name</h3>
+        <p id="modalDate" class="text-xs text-slate-400 mt-1">Submitted date</p>
+      </div>
+      <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
+        <div>
+          <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Contact Information</h4>
+          <div class="mt-2 space-y-1.5 text-sm">
+            <p class="flex items-center gap-2 text-slate-700">
+              <i class="fa-regular fa-envelope w-4 text-slate-400"></i>
+              <a id="modalEmail" href="#" class="text-brand-600 hover:underline"></a>
+            </p>
+            <p class="flex items-center gap-2 text-slate-700">
+              <i class="fa-solid fa-phone w-4 text-slate-400 text-xs"></i>
+              <span id="modalPhone"></span>
+            </p>
+          </div>
+        </div>
+        <hr class="border-slate-100">
+        <div>
+          <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Skills & Expertise</h4>
+          <div id="modalSkills" class="flex flex-wrap gap-1.5"></div>
+        </div>
+        <hr class="border-slate-100">
+        <div>
+          <h4 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Partnership Vision / Bio</h4>
+          <p id="modalBio" class="text-sm text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100 whitespace-pre-wrap"></p>
+        </div>
+      </div>
+      <div class="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-end">
+        <button id="modalCloseBottomBtn" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-semibold rounded-lg transition-colors">Close Preview</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t border-slate-200 mt-auto py-4">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500">
+      © <span id="year">2026</span> Job with Partnership Available. Firebase Permanent Data Storage.
+    </div>
+  </footer>
+
+  <!-- Firebase SDKs (Compat version for simplicity) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Application Logic with Firebase -->
+  <script>
+    // TODO: Replace with your actual Firebase project configuration credentials
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const COLLECTION_NAME = 'partner_applications';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      const ADMIN_PASSCODE = 'Akash@8904';
+      let isAdminLoggedIn = false;
+      let applicants = [];
+
+      // DOM Elements
+      const publicView = document.getElementById('publicView');
+      const adminView = document.getElementById('adminView');
+      const authToggleBtn = document.getElementById('authToggleBtn');
+      const authBtnIcon = document.getElementById('authBtnIcon');
+      const authBtnText = document.getElementById('authBtnText');
+      const adminBadge = document.getElementById('adminBadge');
+
+      const form = document.getElementById('partnerForm');
+      const toastContainer = document.getElementById('toastContainer');
+      const applicantListContainer = document.getElementById('applicantList');
+      const searchInput = document.getElementById('searchInput');
+      const roleFilter = document.getElementById('roleFilter');
+      const statTotalCount = document.getElementById('statTotalCount');
+      const statTopRole = document.getElementById('statTopRole');
+      const exportJsonBtn = document.getElementById('exportJsonBtn');
+      const exportCsvBtn = document.getElementById('exportCsvBtn');
+
+      const loginModal = document.getElementById('loginModal');
+      const loginForm = document.getElementById('loginForm');
+      const adminPasscode = document.getElementById('adminPasscode');
+      const loginError = document.getElementById('loginError');
+      const closeLoginBtn = document.getElementById('closeLoginBtn');
+
+      const detailModal = document.getElementById('detailModal');
+      const closeDetailModalBtn = document.getElementById('closeDetailModalBtn');
+      const modalCloseBottomBtn = document.getElementById('modalCloseBottomBtn');
+
+      // Listen to real-time updates from Firebase Firestore
+      db.collection(COLLECTION_NAME).orderBy('submittedAt', 'desc').onSnapshot((snapshot) => {
+        applicants = [];
+        snapshot.forEach((doc) => {
+          applicants.push({ docId: doc.id, ...doc.data() });
+        });
+        if (isAdminLoggedIn) {
+          renderApplicants();
+        }
+      }, (error) => {
+        console.error("Error fetching Firestore data: ", error);
+        showToast("Database sync error. Check Firebase configuration.", "error");
+      });
+
+      // Auth Handlers
+      authToggleBtn.addEventListener('click', () => {
+        if (isAdminLoggedIn) {
+          isAdminLoggedIn = false;
+          updateViewMode();
+          showToast('Logged out of Admin view.', 'info');
+        } else {
+          loginError.classList.add('hidden');
+          adminPasscode.value = '';
+          loginModal.classList.remove('hidden');
+          adminPasscode.focus();
+        }
+      });
+
+      closeLoginBtn.addEventListener('click', () => loginModal.classList.add('hidden'));
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (adminPasscode.value === ADMIN_PASSCODE) {
+          isAdminLoggedIn = true;
+          loginModal.classList.add('hidden');
+          updateViewMode();
+          showToast('Admin authentication successful!', 'success');
+        } else {
+          loginError.textContent = 'Incorrect passcode.';
+          loginError.classList.remove('hidden');
+        }
+      });
+
+      function updateViewMode() {
+        if (isAdminLoggedIn) {
+          publicView.classList.add('hidden');
+          adminView.classList.remove('hidden');
+          adminBadge.classList.remove('hidden');
+          authBtnText.textContent = 'Logout Admin';
+          authBtnIcon.className = 'fa-solid fa-right-from-bracket';
+          renderApplicants();
+        } else {
+          publicView.classList.remove('hidden');
+          adminView.classList.add('hidden');
+          adminBadge.classList.add('hidden');
+          authBtnText.textContent = 'Admin Login';
+          authBtnIcon.className = 'fa-solid fa-lock';
+        }
+      }
+
+      // Form Submission to Firebase
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+          const submitBtn = document.getElementById('submitBtn');
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Submitting...';
+
+          const formData = {
+            fullName: document.getElementById('fullName').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            rolePreference: document.getElementById('rolePreference').value,
+            skills: document.getElementById('skills').value.split(',').map(s => s.trim()).filter(Boolean),
+            bio: document.getElementById('bio').value.trim(),
+            submittedAt: new Date().toISOString()
+          };
+
+          try {
+            await db.collection(COLLECTION_NAME).add(formData);
+            form.reset();
+            clearValidationErrors();
+            showToast('Application submitted & stored permanently!', 'success');
+          } catch (error) {
+            console.error("Error adding document: ", error);
+            showToast('Failed to submit application. Try again.', 'error');
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> <span>Submit Partner Application</span>';
+          }
+        }
+      });
+
+      function validateForm() {
+        let isValid = true;
+        const fullName = document.getElementById('fullName');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+        const rolePreference = document.getElementById('rolePreference');
+        const skills = document.getElementById('skills');
+        const bio = document.getElementById('bio');
+
+        clearValidationErrors();
+
+        if (!fullName.value.trim()) { showInputError(fullName, 'Full name is required.'); isValid = false; }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email.value.trim() || !emailRegex.test(email.value.trim())) { showInputError(email, 'Valid email required.'); isValid = false; }
+        if (!phone.value.trim()) { showInputError(phone, 'Phone number is required.'); isValid = false; }
+        if (!rolePreference.value) { showInputError(rolePreference, 'Select a role preference.'); isValid = false; }
+        if (!skills.value.trim()) { showInputError(skills, 'At least one skill required.'); isValid = false; }
+        if (!bio.value.trim() || bio.value.trim().length < 15) { showInputError(bio, 'Bio must be at least 15 chars.'); isValid = false; }
+
+        return isValid;
+      }
+
+      function showInputError(inputEl, message) {
+        inputEl.classList.add('border-rose-500', 'focus:ring-rose-500');
+        const parent = inputEl.closest('div').parentElement;
+        const errorMsg = parent.querySelector('.error-msg');
+        if (errorMsg) { errorMsg.textContent = message; errorMsg.classList.remove('hidden'); }
+      }
+
+      function clearValidationErrors() {
+        form.querySelectorAll('input, select, textarea').forEach(i => i.classList.remove('border-rose-500', 'focus:ring-rose-500'));
+        form.querySelectorAll('.error-msg').forEach(m => { m.textContent = ''; m.classList.add('hidden'); });
+      }
+
+      // Render Dashboard Cards
+      function renderApplicants() {
+        if (!isAdminLoggedIn) return;
+
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedRole = roleFilter.value;
+
+        const filtered = applicants.filter(app => {
+          const matchesSearch = app.fullName.toLowerCase().includes(searchTerm) ||
+                                app.email.toLowerCase().includes(searchTerm) ||
+                                (app.skills && app.skills.some(skill => skill.toLowerCase().includes(searchTerm))) ||
+                                app.rolePreference.toLowerCase().includes(searchTerm);
+          const matchesRole = selectedRole === 'ALL' || app.rolePreference === selectedRole;
+          return matchesSearch && matchesRole;
+        });
+
+        statTotalCount.textContent = applicants.length;
+        if (applicants.length > 0) {
+          const roleCounts = {};
+          applicants.forEach(a => roleCounts[a.rolePreference] = (roleCounts[a.rolePreference] || 0) + 1);
+          statTopRole.textContent = Object.keys(roleCounts).reduce((a, b) => roleCounts[a] > roleCounts[b] ? a : b);
+        } else {
+          statTopRole.textContent = 'N/A';
+        }
+
+        if (filtered.length === 0) {
+          applicantListContainer.innerHTML = `
+            <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-slate-200/80 shadow-sm flex flex-col items-center justify-center">
+              <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mb-3 text-2xl"><i class="fa-solid fa-folder-open"></i></div>
+              <h3 class="text-base font-semibold text-slate-700">No applicants found</h3>
+              <p class="text-xs text-slate-500 max-w-xs mt-1">No registrar records match your criteria.</p>
+            </div>
+          `;
+          return;
+        }
+
+        applicantListContainer.innerHTML = filtered.map(app => `
+          <div class="bg-white rounded-xl p-5 border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-3">
+                <div class="flex items-center space-x-3">
+                  <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+                    ${getInitials(app.fullName)}
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 truncate max-w-[150px]">${escapeHTML(app.fullName)}</h3>
+                    <p class="text-xs text-slate-500 truncate max-w-[150px]">${escapeHTML(app.email)}</p>
+                  </div>
+                </div>
+                <span class="text-[10px] font-semibold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-100 shrink-0">
+                  ${escapeHTML(app.rolePreference.split(' ')[0])}
+                </span>
+              </div>
+              <div class="flex flex-wrap gap-1 my-3">
+                ${(app.skills || []).slice(0, 3).map(skill => `<span class="text-[10px] font-medium bg-slate-100 text-slate-600 px-2 py-0.5 rounded">${escapeHTML(skill)}</span>`).join('')}
+              </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <span class="text-[10px]"><i class="fa-regular fa-clock me-1"></i>${formatDate(app.submittedAt)}</span>
+              <div class="flex items-center gap-1">
+                <button onclick="viewApplicantDetails('${app.docId}')" class="text-brand-600 hover:text-brand-800 font-semibold text-xs px-2 py-1 rounded hover:bg-brand-50 transition-colors">Details</button>
+                <button onclick="deleteApplicant('${app.docId}')" class="text-slate-400 hover:text-rose-600 p-1 rounded hover:bg-rose-50 transition-colors"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      searchInput.addEventListener('input', renderApplicants);
+      roleFilter.addEventListener('change', renderApplicants);
+
+      window.viewApplicantDetails = function(docId) {
+        const app = applicants.find(a => a.docId === docId);
+        if (!app) return;
+
+        document.getElementById('modalName').textContent = app.fullName;
+        document.getElementById('modalRoleBadge').textContent = app.rolePreference;
+        document.getElementById('modalDate').textContent = `Submitted on ${new Date(app.submittedAt).toLocaleString()}`;
+        const mEmail = document.getElementById('modalEmail');
+        mEmail.textContent = app.email;
+        mEmail.href = `mailto:${app.email}`;
+        document.getElementById('modalPhone').textContent = app.phone;
+        document.getElementById('modalBio').textContent = app.bio;
+        document.getElementById('modalSkills').innerHTML = (app.skills || []).map(skill => `<span class="text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 px-2.5 py-1 rounded-md">${escapeHTML(skill)}</span>`).join('');
+
+        detailModal.classList.remove('hidden');
+      };
+
+      // Permanent Deletion from Firebase Firestore
+      window.deleteApplicant = async function(docId) {
+        if (confirm('Are you sure you want to permanently delete this registrar record from Firebase?')) {
+          try {
+            await db.collection(COLLECTION_NAME).doc(docId).delete();
+            showToast('Record deleted permanently.', 'info');
+          } catch (error) {
+            console.error("Error deleting document: ", error);
+            showToast('Failed to delete record.', 'error');
+          }
+        }
+      };
+
+      [closeDetailModalBtn, modalCloseBottomBtn].forEach(btn => {
+        btn.addEventListener('click', () => detailModal.classList.add('hidden'));
+      });
+
+      // Export Actions
+      exportJsonBtn.addEventListener('click', () => {
+        if (applicants.length === 0) return showToast('No data to export.', 'error');
+        downloadFile(`Job_Partnership_Registrars_${getTimestamp()}.json`, JSON.stringify(applicants, null, 2), 'application/json');
+        showToast('Exported as JSON!', 'success');
+      });
+
+      exportCsvBtn.addEventListener('click', () => {
+        if (applicants.length === 0) return showToast('No data to export.', 'error');
+        const headers = ["ID", "Full Name", "Email", "Phone", "Role Preference", "Skills", "Bio", "Submitted At"];
+        const rows = applicants.map(a => [
+          a.docId,
+          `"${a.fullName.replace(/"/g, '""')}"`,
+          `"${a.email}"`,
+          `"${a.phone}"`,
+          `"${a.rolePreference}"`,
+          `"${(a.skills || []).join('; ')}"`,
+          `"${a.bio.replace(/"/g, '""')}"`,
+          `"${a.submittedAt}"`
+        ]);
+        const csvContent = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        downloadFile(`Job_Partnership_Registrars_${getTimestamp()}.csv`, csvContent, 'text/csv');
+        showToast('Exported as CSV!', 'success');
+      });
+
+      function downloadFile(filename, text, mimeType) {
+        const element = document.createElement('a');
+        element.setAttribute('href', `data:${mimeType};charset=utf-8,` + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      }
+
+      function getTimestamp() { return new Date().toISOString().slice(0, 10); }
+      function getInitials(name) { return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(); }
+      function formatDate(isoString) { return new Date(isoString).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }); }
+      function escapeHTML(str) {
+  return String(str).replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag]));
+}
+
+      function showToast(message, type = 'success') {
+        const toast = document.createElement('div');
+        const bgColor = type === 'success' ? 'bg-slate-900 text-white' : type === 'error' ? 'bg-rose-600 text-white' : 'bg-slate-700 text-white';
+        const icon = type === 'success' ? 'fa-circle-check text-emerald-400' : type === 'error' ? 'fa-circle-exclamation text-rose-300' : 'fa-circle-info text-sky-400';
+
+        toast.className = `${bgColor} text-xs sm:text-sm px-4 py-3 rounded-xl shadow-lg border border-white/10 flex items-center gap-2 transform transition-all duration-300 pointer-events-auto opacity-0 translate-y-2`;
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${message}</span>`;
+        toastContainer.appendChild(toast);
+        setTimeout(() => toast.classList.remove('opacity-0', 'translate-y-2'), 10);
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-2');
+          setTimeout(() => toast.remove(), 300);
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
